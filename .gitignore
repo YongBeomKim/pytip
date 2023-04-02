@@ -28,7 +28,7 @@ react/
 # logs
 # Dockerfile
 settings.ini
-#*.whl
+*.whl
 # **/settings.ini
 # .env
 !/.momukji
