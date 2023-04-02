@@ -1,7 +1,11 @@
 import os
+import json
+import socket
 import pickle
 import requests
+import subprocess
 from tqdm import tqdm
+from urllib import request
 from multiprocessing import Pool
 
 
@@ -70,4 +74,3 @@ def pickle_data(file_path:str=None, option='w', data=None):
         elif option == 'rb':
             assert data is None, f"불러오는 경우, {data}는 필요 없습니다."
             return pickle.load(f)
-

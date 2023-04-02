@@ -1,6 +1,27 @@
 import os
 import datetime
+import termcolor
+import http.client as httplib
+from urllib import request
 
+
+def check_ip(url="www.google.com", timeout=3):
+
+    r"""인터넷 접속확인
+    :: return :: True / False"""
+
+    conn = httplib.HTTPConnection(url, timeout=timeout)
+    try:
+        conn.request("HEAD", "/")
+        conn.close()
+        # ip 접속정보 확인
+        fqn = os.uname()[1]
+        ext_ip = request.urlopen('https://api.ipify.org/').read()
+        print ("User: %s " % fqn, "\nIP #: %s " % ext_ip)
+        return True
+    except Exception as E:
+        print(termcolor.colored(E, 'red'))
+        return False
 
 # Cache file Check 함수
 def check_folder_file(file:str=None, folder:str=None):
@@ -24,4 +45,36 @@ def check_folder_file(file:str=None, folder:str=None):
     
     return False, file_name
 
+
+# 터미널 메세지 출력기
+# http://www.dreamy.pe.kr/zbxe/CodeClip/165424
+class Message:
+    r"""Text Message Color"""
+    # grey, red, green, yellow, blue, magenta, cyan, white
+    def __repr__(self): 
+        return """Text 내용을 상황별 칼라로 출력\n[process, done, alert, warning]"""
+
+    def __new__(cls, text:str=''):
+        cls.text = text
+        return super().__new__(cls)
+
+    @property
+    def process(self):
+        text = "<"*3 + "  " + self.text + "  " + "<"*5
+        termcolor.cprint(self.text, 'magenta')
+
+    @property
+    def done(self):
+        text = ">"*10 + "  " + self.text + "  " + "<"*10
+        termcolor.cprint(text, 'cyan')
+
+    @property
+    def alert(self):
+        text = "!"*5 + "  " + self.text + "  " + "!"*5
+        termcolor.cprint(text, 'red')
+
+    @property
+    def warning(self):
+        text = "!"*3 + "  " + self.text + "  " + "."*3
+        termcolor.cprint(text, 'grey')
 

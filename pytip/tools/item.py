@@ -1,5 +1,7 @@
 import re
 import datetime
+import itertools
+
 
 REGEX_DATETIME = {
     '[\d]{4}-[\d]{2}-[\d]{2}.[A-Z]{2}[\d]{1,2}:[\d]{1,2}:[\d]{1,2}':
@@ -59,3 +61,18 @@ def string_to_datetime(text:str):
     if format == '':
         return text
     return datetime.datetime.strptime(text, format)
+
+
+# items to split lists
+def divide_chunks(items:list=None, n:int=None):
+    r"""Split items
+    (list) items : 객체 나누기
+    (int)  n : Number"""
+    if type(items) == list:
+        for i in range(0, len(items), n): # looping till length l
+            yield items[i:i + n]          # list should have
+    
+    elif type(items) == dict:
+        for i in range(0, len(items), n):
+            yield dict(itertools.islice(items.items(), i ,i+n))
+
