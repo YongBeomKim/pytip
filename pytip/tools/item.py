@@ -12,36 +12,52 @@ REGEX_DATETIME = {
 
 
 # Input params 전처리 작업용
-def date_to_string(_date:any=None, datetime_obj:bool=False):
+def date_to_string(
+        date:any=None, 
+        only_number:bool=False,
+        datetime_obj:bool=False,
+        business_day:bool=False,
+    ):
 
     r"""date 객체를 string 으로 자동변환
-    _date    : 날짜객체
-    datetime : datetime 객체로 출력
-    return :: '2000-01-01'"""
-    
+    _date        : 날짜객체
+    only_number  : 날짜 구분자 없이 숫자로만 출력 
+    datetime_obj : datetime 객체로 출력
+    business_day : 평일 날짜로 변환"""
+
     _return = None
-    if _date is None:
+    if date is None:
         _return = datetime.date.today().isoformat()
-    if type(_date) == datetime.date:
-        _return = _date.isoformat()
-    elif type(_date) == datetime.datetime:
-        _return = _date.date().isoformat()
-    elif type(_date) == str:
-        # '20020802'
-        _check = "".join(re.findall(r'[\d]{8}', _date))
+    elif type(date) == datetime.date:
+        _return = date.isoformat()
+    elif type(date) == datetime.datetime:
+        _return = date.date().isoformat()
+    elif type(date) == str:
+        _check = "".join(re.findall(r'[\d]{8}', date))
+        _check_re = re.findall('[,-//.]', date)
         if len(_check) == 8:
             _return = f"{_check[:4]}-{_check[4:6]}-{_check[6:]}"
-            
-        for punct_string in ['-','/',',', '.']:
-            if _date.find(punct_string) != -1:
-                _return = "-".join(list(map(lambda x : (f'{x:0>2}'), _date.split(punct_string))))
-            else:
-                pass
 
-    assert _return is not None, f'TypeError : {_date} 를 분석할 수 없습니다'
+        elif len(_check_re) > 0:
+            for punct_string in ['-','/',',', '.']:
+                if date.find(punct_string) != -1:
+                    _return = "-".join(list(map(
+                        lambda x : (f'{x:0>2}'), date.split(punct_string)))
+                    )
+                else:
+                    pass
+
+    assert _return is not None, f'TypeError : {date} 를 분석할 수 없습니다'
+    # datetime.datetime.strptime('09/19/22 13:55:26', '%m/%d/%y %H:%M:%S')
+    if business_day:
+        _return = datetime.datetime.strptime(_return, '%Y-%m-%d').date()
+        if (_return.weekday() - 4) > 0: # 주말일 때만 해당함수 적용
+            _return = _return - datetime.timedelta(_return.weekday() - 4)
+        _return = _return.isoformat()
+    if only_number:
+        _return = _return.replace('-','')
     if datetime_obj:
-        # datetime.datetime.strptime('09/19/22 13:55:26', '%m/%d/%y %H:%M:%S')
-        return datetime.datetime.strptime(_return, '%Y-%m-%d').date()
+        _return = datetime.datetime.strptime(_return, '%Y-%m-%d').date()
     return _return
 
 
