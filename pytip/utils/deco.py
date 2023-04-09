@@ -43,4 +43,3 @@ def web_retries(number_retries = 3):
             return None
         return wrapper
     return decorator
-

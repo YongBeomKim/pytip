@@ -5,17 +5,18 @@ from setuptools import setup, find_packages
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-
 setup(
     name = 'pytip',
-    version = '0.0.8',
+    version = '0.1.0',
     license = 'MIT',
     long_description = long_description,
     long_description_content_type = 'text/markdown',
     author = 'momukji lab',
     author_email = 'ybkim@momukji.com',
     url = 'https://github.com/YongBeomKim/pytip',
-    packages = find_packages(),
+    packages = find_packages(
+        exclude = ['jupyter', 'backup'],    
+    ),
     python_requires = '>=3',
     keywords = ['pytip'],
     install_requires=[

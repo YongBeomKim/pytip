@@ -3,7 +3,7 @@ from matplotlib.font_manager import fontManager
 
 
 # matplotlib font & style
-def matplot_plt(
+def plt_ko(
         font_list:list=['D2Coding', 'NanumGothicCoding', 'NanumGothic'],
         index:int=-1,
         style='seaborn',
