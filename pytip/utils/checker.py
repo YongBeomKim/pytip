@@ -1,34 +1,26 @@
-import os
-import datetime
-import termcolor
-import http.client as httplib
-from urllib import request
+from .base import *
 
 
-def check_ip(url="www.google.com", timeout=3):
-
+def check_ip(url="http://ip.jsontest.com"):
     r"""인터넷 접속확인
     :: return :: True / False"""
-
-    conn = httplib.HTTPConnection(url, timeout=timeout)
+    response = request.urlopen(url).read()
     try:
-        conn.request("HEAD", "/")
-        conn.close()
-        # ip 접속정보 확인
-        fqn = os.uname()[1]
-        ext_ip = request.urlopen('https://api.ipify.org/').read()
-        print ("User: %s " % fqn, "\nIP #: %s " % ext_ip)
-        return True
+        response = json.loads(response)
+        return response['ip']
     except Exception as E:
         print(termcolor.colored(E, 'red'))
-        return False
+        return None
+
 
 # Cache file Check 함수
 def check_folder_file(file:str=None, folder:str=None):
+
     r"""파일과 폴더 존재여부 확인 (폴더가 없으면 해당 폴더를 생성)
     file (str) : 파일이름
     folder (str) : 폴더명
     :: return :: Boolean, file_path"""
+
     assert folder is not None, "확인할 folder 를 지정하지 않았습니다."
     str_folder = os.path.abspath(os.path.join(folder, ''))
 

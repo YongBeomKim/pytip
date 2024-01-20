@@ -1,14 +1,7 @@
-import os
-import json
-import socket
-import pickle
-import requests
-import subprocess
-from tqdm import tqdm
-from urllib import request
-from multiprocessing import Pool
+from .base import *
 
 
+# MultiProcess
 def multiprocess_items(funcion, items:int, worker:list, display=False):
     r"""list() 데이터를  function 에 multiprocessing 반복적용
     function : 반복적용할 함수
@@ -47,38 +40,3 @@ def file_pickle(
         elif option == 'rb':
             assert data is None, f"불러오는 경우, {data}는 필요 없습니다."
             return pickle.load(f)
-
-
-# https://stackoverflow.com/questions/16694907/download-large-file-in-python-with-requests
-def file_download(
-        url:str=None, 
-        file_path:str=None,
-        chunk_size:int=8192, 
-        overwite=False
-    ) -> str:
-
-    r"""웹사이트 파일 다운로드
-    url (str) : 다운로드 파일 url 주소
-    foler (str) : `./data` 파일 저장 경로
-    file_name (str) : 저장할 파일 이름
-    chunk_size (int) : encoded response set chunk_size parameter to None.
-    overwrite (bool) : download file overwrite"""
-
-    assert file_path is not None, "file_path is not Set ..."
-    if overwite == False:
-        if os.path.exists(file_path):
-            print(f'{file_path} is existed\n`overwrite` changes to `True`')
-            return file_path
-
-    headers = {
-        "Referer":url,
-        "User-Agent":"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:94.0) Gecko/20100101 Firefox/94.0",
-    }
-    with requests.get(url, headers=headers,stream=True) as r:
-        r.raise_for_status()
-        with open(file_path, 'wb') as f:
-            for chunk in r.iter_content(chunk_size=chunk_size):
-                f.write(chunk)
-    print(f'{file_path} downloading is done.')
-    return file_path
-

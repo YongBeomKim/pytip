@@ -1,5 +1,4 @@
-import numpy
-import pandas
+from .base import *
 
 
 def df_number_column(
@@ -35,4 +34,3 @@ def df_number_column(
     df = df.astype({_:'float32'  for _ in df.select_dtypes(numpy.float64).columns})
     df = df.replace({numpy.nan: None})
     return df
-

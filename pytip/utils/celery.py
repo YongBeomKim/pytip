@@ -1,8 +1,8 @@
-import re
-import pandas
+from .base import *
 from ..tools.item import string_to_datetime
 
 
+# Celery Log 파일 분석기
 class Celery:
 
     def __init__(self, file_path:str=None):
@@ -92,4 +92,3 @@ class Celery:
         for column in ['init', 'finish']: # 
             df[column] = df[column].map(lambda x : string_to_datetime(x))
         return df
-

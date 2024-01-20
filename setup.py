@@ -6,23 +6,27 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name = 'pytip',
-    version = '0.1.1',
+    name    = 'pytip',
+    version = '0.1.9',
     license = 'MIT',
     long_description = long_description,
     long_description_content_type = 'text/markdown',
+    url = 'https://github.com/YongBeomKim/pytip',
     author = 'momukji lab',
     author_email = 'ybkim@momukji.com',
-    url = 'https://github.com/YongBeomKim/pytip',
-    packages = find_packages(
-        exclude = ['jupyter', 'backup'],    
-    ),
-    python_requires = '>=3',
     keywords = ['pytip'],
+    python_requires = '>=3',
+    include_package_data = True,
+    # https://setuptools.pypa.io/en/latest/userguide/package_discovery.html
+    package_data = {'': ['json/*.json']}, # 파일추가
+    # package_dir = {'': ['json/*.json']},
+    packages = find_packages(
+        exclude = ['jupyter', 'backup', '.vscode', '.ipynb_checkpoints']
+    ),
     install_requires=[
-        'matplotlib',
+        'xlrd',
         'termcolor',
-        'requests',
+        'openpyxl',
         'pandas',
         'numpy',
         'tqdm',

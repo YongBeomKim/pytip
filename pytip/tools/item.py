@@ -1,16 +1,4 @@
-import re
-import datetime
-import itertools
-
-
-REGEX_DATETIME = {
-    '[\d]{4}-[\d]{2}-[\d]{2}.[A-Z]{2}[\d]{1,2}:[\d]{1,2}:[\d]{1,2}':
-    '%Y-%m-%d.%p%I:%M:%S', # '2022-07-31.AM3:02:30'
-    '[\d]{4}\.[\d]{2}\.[\d]{2}\.[A-Z]{2}[\d]{1,2}:[\d]{1,2}':
-    '%Y.%m.%d.%p%I:%M',    # '2022.07.31.AM3:02',
-    "^[0-9]{4}/[0-9]{1,2}/[0-9]{1,2} [0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}":
-    '%Y/%m/%d %H:%M:%S',    # '2023/03/28 10:40:00',
-}
+from .base import *
 
 
 # Input params 전처리 작업용
@@ -25,27 +13,35 @@ def date_to_string(
     _date        : 날짜객체
     only_number  : 날짜 구분자 없이 숫자로만 출력 
     datetime_obj : datetime 객체로 출력
-    business_day : 평일 날짜로 변환"""
+    business_day : 주말 -> 해당 주차 평일로 변환"""
 
     _return = None
+    token_list = ')월화수목금토일연월일년('
     if date is None:
         _return = datetime.date.today().isoformat()
     elif type(date) == datetime.date:
         _return = date.isoformat()
     elif type(date) == datetime.datetime:
         _return = date.date().isoformat()
+    elif type(date) == pandas._libs.tslibs.timestamps.Timestamp:
+        _return = str(date.to_pydatetime().date())
     elif type(date) == str:
         _check = "".join(re.findall(r'[\d]{8}', date))
-        _check_re = re.findall('[,-//.]', date)
+        _check_re = re.findall(f'[,-//.{token_list}]', date)
         if len(_check) == 8:
             _return = f"{_check[:4]}-{_check[4:6]}-{_check[6:]}"
 
         elif len(_check_re) > 0:
-            for punct_string in ['-','/',',', '.']:
+            for punct_string in ['-','/',',', '.'] + list(token_list):
                 if date.find(punct_string) != -1:
-                    _return = "-".join(list(map(
+                    _date = list(map(
                         lambda x : (f'{x:0>2}'), date.split(punct_string)))
-                    )
+                    if len(_date[0]) == 2:
+                        if int(_date[0]) < 50:
+                            _date[0] = '20'+_date[0] # 연도가 50보다 작을 땐, 2000년대
+                        else:
+                            _date[0] = '19'+_date[0] # 연도가 50보다 클 땐, 2000년대
+                    _return = "-".join(_date) 
                 else:
                     pass
 
@@ -61,6 +57,32 @@ def date_to_string(
     if datetime_obj:
         _return = datetime.datetime.strptime(_return, '%Y-%m-%d').date()
     return _return
+
+
+# items to split lists
+def divide_chunks(items:list=None, n:int=None):
+    r"""Split items
+    (list) items : 객체 나누기
+    (int)  n : Number"""
+    if type(items) == list:
+        for i in range(0, len(items), n): # looping till length l
+            yield items[i:i + n]          # list should have
+    
+    elif type(items) == dict:
+        for i in range(0, len(items), n):
+            yield dict(itertools.islice(items.items(), i ,i+n))
+
+
+# 문자 난수생성 (비밀번호 생성기)
+def password(length:int=12, not_punct=False) -> str:
+    r"""난수문자 생성기 (ex> 비밀번호)
+    length    : 생성문자 길이
+    not_punct : 특수문자 비포함"""
+    if not_punct == True:
+        letters = string.ascii_letters + string.digits
+    else:
+        letters = string.ascii_letters + string.digits + "!#$%&*+-?@" # string.punctuation
+    return "".join([random.choice(letters)  for _ in range(length)])
 
 
 # 텍스트를 datetime 객체로 해석 (REGEX_DATETIME)
@@ -79,18 +101,3 @@ def string_to_datetime(text:str):
     if format == '':
         return text
     return datetime.datetime.strptime(text, format)
-
-
-# items to split lists
-def divide_chunks(items:list=None, n:int=None):
-    r"""Split items
-    (list) items : 객체 나누기
-    (int)  n : Number"""
-    if type(items) == list:
-        for i in range(0, len(items), n): # looping till length l
-            yield items[i:i + n]          # list should have
-    
-    elif type(items) == dict:
-        for i in range(0, len(items), n):
-            yield dict(itertools.islice(items.items(), i ,i+n))
-

@@ -1,6 +1,5 @@
-import time
-import termcolor
-from functools import wraps
+from .base import *
+
 
 # 실행 시간을 측정
 def elapsed_time(function):
