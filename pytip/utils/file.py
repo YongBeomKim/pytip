@@ -19,23 +19,30 @@ def multiprocess_items(funcion, items:int, worker:list, display=False):
 def file_pickle(
         file_path:str=None,
         option='w', 
-        data=None
+        data=None,
+        exist=False,
     ):
     r"""파이썬 객체를 Pickle 로 저장하고 호출
-    file (str) : 파일이름
+    file (str)   : 파일이름
     option (str) : w,r (Write / Read)
-    data (any) : pickle 로 저장할 
+    data (any)   : pickle 로 저장할 변수
+    exist (bool) : 해당 파일이 있으면 저장
     """
 
     assert option in ['w', 'r'], f"`option` 은 `w`,`r` 하나를 입력하세요."
-    option = {'w':'wb', 'r':'rb'}[option]
+    if (option == 'w') & (data is None):
+        return None
 
+    option = {'w':'wb', 'r':'rb'}[option]
     with open(file_path, option) as f:
-        if option == 'wb':
-            assert data is not None, f"{data} 값을 저장 할 수 없습니다."
-            pickle.dump(data, f)
-            print(f"{file_path} saving done.")
-            return None
+        if option == 'wb': # 저장하기
+            if data is None:
+                return None
+            else:
+                assert data is not None, f"{data} 값을 저장 할 수 없습니다."
+                pickle.dump(data, f)
+                print(f"{file_path} saving done.")
+                return None
 
         elif option == 'rb':
             assert data is None, f"불러오는 경우, {data}는 필요 없습니다."

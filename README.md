@@ -1,4 +1,4 @@
-# Python Useful Tip & Tools
+# Personally tiny useful Python tips
 
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE)
 [![Docs](https://img.shields.io/badge/docs-stable-blue.svg)](https://domschl.github.io/ml-indie-tools/index.html)
@@ -6,13 +6,6 @@
 
 
 ## Version
-0.1.5 - Excel worksheet loading, datatime add pandas data
+0.0.1 - datetime object & string Integration management in Python
 
-## Installation
-Based on : https://github.com/YongBeomKim/pytip
-```bash
-	$ pip install pytip
-	$ pip install -i https://pypi.python.org/pytip pytip
-```
-
-© 2023 GitHub : https://github.com/YongBeomKim
+© 2024 GitHub : https://github.com/YongBeomKim
