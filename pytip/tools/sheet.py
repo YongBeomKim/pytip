@@ -28,12 +28,13 @@ class Excel:
     @property
     def names(self) -> list:
         r"""Excel WorkSheet 목록 가져오기"""
-        if self._check_xls:
-            wb = xlrd.open_workbook_xls(self.file)
-            return wb.sheet_names()
-        else:
-            wb = openpyxl.load_workbook(self.file)
-            return wb.sheetnames
+        return pandas.ExcelFile(self.file).sheet_names
+        # if self._check_xls:
+        #     wb = xlrd.open_workbook_xls(self.file)
+        #     return wb.sheet_names()
+        # else:
+        #     wb = openpyxl.load_workbook(self.file)
+        #     return wb.sheetnames
 
     def sheet(self, name=None, header:int=None):
         r"""시트 데이터 가져오기

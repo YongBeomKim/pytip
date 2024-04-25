@@ -6,7 +6,7 @@
 # tools   : 부가적
 
 from .utils.celery import Celery
-from .utils.checker import Message, check_folder_file, check_ip
+from .utils.checker import Message, check_folder_file, check_ip, pkg_missed
 from .utils.deco import web_retries, elapsed_time
 from .utils.web import FakeAgent
 from .utils.func import progressBar

@@ -38,6 +38,16 @@ def check_folder_file(file:str=None, folder:str=None):
     return False, file_name
 
 
+# 패키지 설치여부 확인
+def pkg_missed(pkgs:list):
+    r"""missing pkg checker -> list"""
+    if type(pkgs) == str: 
+        pkgs = [pkgs]
+    required  = set(pkgs)
+    installed = {pkg.key for pkg in pkg_resources.working_set}
+    missing   = required - installed
+    return list(missing)
+
 # 터미널 메세지 출력기
 # http://www.dreamy.pe.kr/zbxe/CodeClip/165424
 class Message:
