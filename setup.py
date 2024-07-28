@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name    = 'pytip',
-    version = '0.0.3',
+    version = '0.0.12',
     license = 'MIT',
     description = "Personally tiny useful Python tips",
     long_description = long_description,

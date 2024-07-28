@@ -7,7 +7,7 @@ class FakeAgentClass:
 
     def __init__(self):
         # self.folder = '../data'
-        self.folder = '../data'
+        self.folder = '../json'
         self.filename = 'browsers.json'
 
     def __repr__(self): 

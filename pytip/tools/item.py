@@ -3,9 +3,9 @@ from .base import *
 
 # Input params 전처리 작업용
 def date_to_string(
-        date:any=None, 
-        only_number:bool=False,
+        date:any=None,
         datetime_obj:bool=False,
+        only_number:bool=False,
         business_day:bool=False,
     ):
 
@@ -57,6 +57,21 @@ def date_to_string(
     if datetime_obj:
         _return = datetime.datetime.strptime(_return, '%Y-%m-%d').date()
     return _return
+
+
+# Date Range to Split
+def split_date_range(start, end, freq='2Y'):
+    r"""날짜구간 분할하기"""
+    date_list_raw = pandas.date_range(start, end, freq=f'{freq}S')
+    date_list_raw = list(map(lambda x : date_to_string(x), date_list_raw))
+    date_list = [[_,
+        date_to_string(
+            date_to_string(date_list_raw[no+1], datetime_obj=True) - \
+                datetime.timedelta(days=1)
+        )
+    ]  for no,_ in enumerate(date_list_raw[:-1])]
+    date_list += [[date_list_raw[-1], end]]
+    return date_list
 
 
 # items to split lists

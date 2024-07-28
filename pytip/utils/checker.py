@@ -13,29 +13,30 @@ def check_ip(url="http://ip.jsontest.com"):
         return None
 
 
-# Cache file Check 함수
-def check_folder_file(file:str=None, folder:str=None):
+# 파일 생성내용 확인
+def check_file(file_path:str=None, days:int=1):
+    r"""경로폴더 및 파일확인 : 동일날짜 생성시 확인
+    file_path  : `./data/backup/file.pkl`
+    days (int) : 파일 생성일 간격날짜 """
+    # params
+    foler_path_list  = file_path.split('/')
+    foler_path_list = list(filter(lambda x : x !=".", foler_path_list))
+    folders, _file = foler_path_list[:-1], foler_path_list[-1]
 
-    r"""파일과 폴더 존재여부 확인 (폴더가 없으면 해당 폴더를 생성)
-    file (str) : 파일이름
-    folder (str) : 폴더명
-    :: return :: Boolean, file_path"""
+    # folder depth : 다중 폴더 확인 및 생성
+    for folder in folders:
+        if os.path.isdir(folder) == False:
+            os.mkdir(folder)
+        os.chdir(folder)
+    [os.chdir('../')  for _ in folders]
 
-    assert folder is not None, "확인할 folder 를 지정하지 않았습니다."
-    str_folder = os.path.abspath(os.path.join(folder, ''))
-
-    # Check Folder 
-    if not os.path.exists(str_folder):
-        os.makedirs(str_folder)
-
-    # Check File (생성 날짜가 동일한지 확인)
-    file_name = os.path.abspath(os.path.join(folder, file))
-    if os.path.exists(file_name) == True:
-        file_creation_date = datetime.datetime.fromtimestamp(os.path.getatime(file_name)).date()
-        if file_creation_date == datetime.datetime.today().date():
-            return True, file_name
-    
-    return False, file_name
+    # check exists file
+    if os.path.exists(file_path) == True:
+        date_now  = datetime.datetime.today()
+        date_file = datetime.datetime.fromtimestamp(os.path.getatime(file_path))
+        if (date_now - date_file).days < days:
+            return True
+    return False
 
 
 # 패키지 설치여부 확인
@@ -48,9 +49,11 @@ def pkg_missed(pkgs:list):
     missing   = required - installed
     return list(missing)
 
+
 # 터미널 메세지 출력기
 # http://www.dreamy.pe.kr/zbxe/CodeClip/165424
 class Message:
+
     r"""Text Message Color"""
     # grey, red, green, yellow, blue, magenta, cyan, white
     def __repr__(self): 

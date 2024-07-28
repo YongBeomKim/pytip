@@ -34,3 +34,10 @@ def df_number_column(
     df = df.astype({_:'float32'  for _ in df.select_dtypes(numpy.float64).columns})
     df = df.replace({numpy.nan: None})
     return df
+
+
+def df_int(df):
+    r"""int64 필드값을 int32 로 변경하기"""
+    d = dict.fromkeys(df.select_dtypes(numpy.int64).columns, numpy.int32)
+    df = df.astype(d)
+    return df

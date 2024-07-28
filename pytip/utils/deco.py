@@ -41,4 +41,5 @@ def web_retries(number_retries = 3):
                     time.sleep(0.8)
             return None
         return wrapper
+
     return decorator

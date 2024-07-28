@@ -21,6 +21,7 @@ def file_pickle(
         option='w', 
         data=None,
         exist=False,
+        display=True,
     ):
     r"""파이썬 객체를 Pickle 로 저장하고 호출
     file (str)   : 파일이름
@@ -41,7 +42,8 @@ def file_pickle(
             else:
                 assert data is not None, f"{data} 값을 저장 할 수 없습니다."
                 pickle.dump(data, f)
-                print(f"{file_path} saving done.")
+                if display:
+                    print(f"{file_path} saving done.")
                 return None
 
         elif option == 'rb':
