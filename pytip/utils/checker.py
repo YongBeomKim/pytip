@@ -19,16 +19,18 @@ def check_file(file_path:str=None, days:int=1):
     file_path  : `./data/backup/file.pkl`
     days (int) : 파일 생성일 간격날짜 """
     # params
-    foler_path_list  = file_path.split('/')
-    foler_path_list = list(filter(lambda x : x !=".", foler_path_list))
-    folders, _file = foler_path_list[:-1], foler_path_list[-1]
+    foler_path_list = file_path.split('/')
+    folders, _file  = foler_path_list[:-1], foler_path_list[-1]
+    folders = list(filter(lambda x : x !=".", folders))
 
     # folder depth : 다중 폴더 확인 및 생성
+    path_start = os.getcwd()
     for folder in folders:
         if os.path.isdir(folder) == False:
+            print(f"{folder} Created")
             os.mkdir(folder)
         os.chdir(folder)
-    [os.chdir('../')  for _ in folders]
+    os.chdir(path_start)
 
     # check exists file
     if os.path.exists(file_path) == True:
