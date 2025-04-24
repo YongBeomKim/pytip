@@ -9,3 +9,22 @@
 0.0.1 - datetime object & string Integration management in Python
 
 © 2024 GitHub : https://github.com/YongBeomKim
+
+
+
+with open(file_path, 'r') as f:
+    file_content = f.readlines()
+
+new_file_content = []
+for line in file_content:
+    if line.startswith(f"{list_name} = "):
+        # 해당 List 변수 line을 찾아서 내용 수정
+        list_str = line.split("=")[1].strip()
+        list_variable = ast.literal_eval(list_str)
+
+        if isinstance(list_variable, list):
+            modified_list = modification_function(list_variable)
+            new_file_content.append(f"{list_name} = {str(modified_list)}\n")
+        else:
+            print(f"변수 '{list_name}'이(가) List 형태가 아닙니다.")
+            return

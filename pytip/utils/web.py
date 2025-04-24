@@ -20,10 +20,6 @@ class FakeAgentClass:
         with open(DB_PATH + f"/{self.filename}", 'r') as file:
             json_data = file.read()
         json_data = json.loads(json_data)['browsers']
-        # import pkg_resources
-        # json_data = json.load(pkg_resources.resource_stream(
-        #     self.folder, self.filename)
-        # )
         return json_data
 
     def _get(self, name:str=None):

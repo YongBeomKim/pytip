@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name    = 'pytip',
-    version = '0.0.12',
+    version = '0.0.14',
     license = 'MIT',
     description = "Personally tiny useful Python tips",
     long_description = long_description,
@@ -26,16 +26,18 @@ setup(
     ),
     install_requires=[
         # 'xlrd',
+        # 'numpy',
         # 'openpyxl',
         'termcolor',
         'requests',
         'pandas',
-        # 'numpy',
+        'requests',
+        'sqlalchemy',
         'tqdm',
     ],
     classifiers=[
-        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
     ],
 )

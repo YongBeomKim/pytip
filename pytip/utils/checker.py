@@ -1,7 +1,7 @@
 from .base import *
 
 
-def check_ip(url="http://ip.jsontest.com"):
+def check_ip(url='https://api.ipify.org?format=json'):
     r"""인터넷 접속확인
     :: return :: True / False"""
     response = request.urlopen(url).read()
@@ -14,7 +14,8 @@ def check_ip(url="http://ip.jsontest.com"):
 
 
 # 파일 생성내용 확인
-def check_file(file_path:str=None, days:int=1):
+# https://www.python-engineer.com/posts/check-if-file-exists/
+def check_file(file_path:str=None, days:int=1, display=False):
     r"""경로폴더 및 파일확인 : 동일날짜 생성시 확인
     file_path  : `./data/backup/file.pkl`
     days (int) : 파일 생성일 간격날짜 """
@@ -36,20 +37,27 @@ def check_file(file_path:str=None, days:int=1):
     if os.path.exists(file_path) == True:
         date_now  = datetime.datetime.today()
         date_file = datetime.datetime.fromtimestamp(os.path.getatime(file_path))
-        if (date_now - date_file).days < days:
+        date_gap  = (date_now - date_file).days
+        if days > date_gap:
             return True
+        else:
+            return False
+            # if display:
+            #     message  = f"Now  : {date_now}\nFile : "
+            #     message += f"{date_file}\nDate Gap : {date_gap}"
+            #     print(message)
     return False
 
 
-# 패키지 설치여부 확인
-def pkg_missed(pkgs:list):
-    r"""missing pkg checker -> list"""
-    if type(pkgs) == str: 
-        pkgs = [pkgs]
-    required  = set(pkgs)
-    installed = {pkg.key for pkg in pkg_resources.working_set}
-    missing   = required - installed
-    return list(missing)
+# # 패키지 설치여부 확인
+# def pkg_missed(pkgs:list):
+#     r"""missing pkg checker -> list"""
+#     if type(pkgs) == str: 
+#         pkgs = [pkgs]
+#     required  = set(pkgs)
+#     installed = {pkg.key for pkg in pkg_resources.working_set}
+#     missing   = required - installed
+#     return list(missing)
 
 
 # 터미널 메세지 출력기
